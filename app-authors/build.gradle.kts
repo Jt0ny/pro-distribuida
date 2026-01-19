@@ -34,6 +34,13 @@ dependencies {
     implementation("io.smallrye.stork:stork-service-discovery-consul")
     implementation("io.smallrye.reactive:smallrye-mutiny-vertx-consul-client")
 
+    //flyway
+    implementation("io.quarkus:quarkus-flyway")
+    implementation("org.flywaydb:flyway-database-postgresql")
+
+//docker
+    implementation("io.quarkus:quarkus-container-image-docker")
+
 }
 
 tasks.withType<JavaCompile> {
