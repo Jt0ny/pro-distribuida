@@ -46,6 +46,9 @@ dependencies {
     //docker
     implementation("io.quarkus:quarkus-container-image-docker")
 
+    //Resiliencia
+    implementation("io.quarkus:quarkus-smallrye-fault-tolerance")
+
 }
 
 tasks.withType<JavaCompile> {

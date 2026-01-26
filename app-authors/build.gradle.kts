@@ -41,6 +41,10 @@ dependencies {
 //docker
     implementation("io.quarkus:quarkus-container-image-docker")
 
+    //telemetria
+    implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
+    testImplementation("io.quarkus:quarkus-jackson")
+
 }
 
 tasks.withType<JavaCompile> {

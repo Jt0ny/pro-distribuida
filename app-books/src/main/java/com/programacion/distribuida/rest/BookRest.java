@@ -1,6 +1,7 @@
 package com.programacion.distribuida.rest;
 
 import com.programacion.distribuida.clients.AuthorRestClient;
+import com.programacion.distribuida.clients.CustomersRestClient;
 import com.programacion.distribuida.dto.BookDto;
 import com.programacion.distribuida.repo.BookRepository;
 import io.smallrye.stork.Stork;
@@ -36,6 +37,10 @@ public class BookRest {
     @Inject
     @RestClient
     AuthorRestClient client;
+
+    @Inject
+    @RestClient
+    CustomersRestClient customerClient;
 
     AtomicInteger index = new AtomicInteger();
 
@@ -139,6 +144,13 @@ public class BookRest {
 //        System.out.println("Invocando authros-api: "+instancia.getHost()+":"+instancia.getPort());
         return Response.ok("ok").build();
     }
+
+    @GET
+    @Path("/test2")
+    public List<Object> test2(){
+        return customerClient.findAll();
+    }
 }
+
 
 
