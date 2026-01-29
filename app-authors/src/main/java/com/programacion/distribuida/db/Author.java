@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+//Commit de prueba
 @Entity
 @Table(name = "authors")
 @Getter
