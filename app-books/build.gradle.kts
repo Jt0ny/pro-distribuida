@@ -49,6 +49,8 @@ dependencies {
     //Resiliencia
     implementation("io.quarkus:quarkus-smallrye-fault-tolerance")
 
+    implementation("io.quarkus:quarkus-kubernetes")
+
 }
 
 tasks.withType<JavaCompile> {

@@ -1,5 +1,5 @@
 # docker build -f src/main/docker/Dockerfile.jvm -t anthonyjoel/app-books .
-#docker push anthonyjoel/app-books
+# docker push anthonyjoel/app-books
 
 FROM docker.io/eclipse-temurin:21.0.9_10-jre-alpine-3.23
 
