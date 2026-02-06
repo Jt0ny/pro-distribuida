@@ -46,13 +46,14 @@ services:
       QUARKUS_HTTP_PORT: 8070
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
+      QUARKUS_FLYWAY_ACTIVE: "true"
+      QUARKUS_FLYWAY_MIGRATE_AT_START: "true"
+      QUARKUS_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      QUARKUS_FLYWAY_BASELINE_VERSION: "1.0.1"
     expose:
       - 8070
-   # ports:
-    #  - 8888:8070
     deploy:
       replicas: 1
-
     depends_on:
       - dbserver
 
@@ -66,16 +67,33 @@ services:
       QUARKUS_HTTP_PORT: 8070
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
+      QUARKUS_FLYWAY_ACTIVE: "true"
+      QUARKUS_FLYWAY_MIGRATE_AT_START: "true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.books.rule=PathPrefix(`/app-books`)"
+      - "traefik.http.services.books.loadbalancer.server.port=8070"
     expose:
       - 8070
-   # ports:
-    #  - 8889:8070
     deploy:
       replicas: 1
 
     depends_on:
       - dbserver
       - authors
+
+  app-web-react:
+    build:
+      context: ../../app-web-react
+      dockerfile: docker/Dockerfile
+      args:
+        VITE_BOOKS_API_URL: http://proxy:8080/app-books/books
+    image: anthonyjoel/app-web-react
+    ports:
+      - 3000:3000
+    depends_on:
+      - books
+
 #  customers:
 #    image: anthonyjoel/app-customers
 #    environment:
@@ -95,3 +113,29 @@ services:
 #    depends_on:
 #      - dbserver
 #      - authors
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./configs:/etc/prometheus
+    ports:
+      - "9090:9090"
+    expose:
+      - 9090
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+  #    depends_on:
+  #      - prometheus
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    environment:
+      DATA_SOURCE_URI: "dbserver:5432/books-db?sslmode=disable"
+      DATA_SOURCE_USER: postgres
+      DATA_SOURCE_PASSWORD: 1234
+    ports:
+      - 9187

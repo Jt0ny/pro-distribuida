@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-web-react
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-web-react
+  template:
+    metadata:
+      labels:
+        app: app-web-react
+    spec:
+      containers:
+        - name: app-web-react
+          image: anthonyjoel/app-web-react:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-web-react-service
+spec:
+  type: ClusterIP
+  selector:
+    app: app-web-react
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-web-react-hpa
+spec:
+  minReplicas: 1
+  maxReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-web-react
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70

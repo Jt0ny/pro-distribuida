@@ -1,6 +1,6 @@
 # docker build -f src/main/docker/Dockerfile.jvm -t app-authors .
 # docker build -f src/main/docker/Dockerfile.jvm -t anthonyjoel/app-authors .
-# docker push anthonyjoel/app-authors
+# docker push d /app-authors
 
 FROM docker.io/eclipse-temurin:21.0.9_10-jre-alpine-3.23
 
